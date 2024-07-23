@@ -1,34 +1,25 @@
 class Solution(object):
-    def rec(self, ind, target, candidates, finalRes, res):
+    def rec(self, ind, target, candidates, res, ans):
         if target == 0:
-            if sorted(res) not in finalRes:
-                finalRes.append(sorted(res[:]))
-            return
+            ans.append(res[:])
 
-        if ind == 0:
-            if candidates[ind] == target:
-                res.append(candidates[ind])
-                if sorted(res) not in finalRes:
-                    finalRes.append(sorted(res[:]))
-            return
-
-        if target >= candidates[ind]:
-            res.append(candidates[ind])
-            self.rec(ind - 1, target - candidates[ind], candidates, finalRes, res)
+        # loop through possible next
+        for i in range(ind, len(candidates)):
+            if candidates[ind] > target:
+                break
+            if i > ind and candidates[ind] == candidates[ind - 1]:
+                continue
+            res.append(candidates[i])
+            self.rec(i + 1, target - candidates[i], candidates, res, ans)
             res.pop()
-        self.rec(ind - 1, target, candidates, finalRes, res)
+
         return
 
-    def combinationSum2(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
-        finalRes = []
-        self.rec(len(candidates) - 1, target, candidates, finalRes, [])
-        return finalRes
+    def powerSet(self, candidates, target):
+        ans = []
+        self.rec(0, target, sorted(candidates), [], ans)
+        return ans
 
 if __name__ == "__main__":
     s = Solution()
-    print(s.combinationSum2([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],30))
+    print(s.combinationSum2([2,5,2,1,2],5))
